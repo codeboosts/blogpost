@@ -1,7 +1,7 @@
-import { Model } from 'mongoose';
 import { IdOutput, SuccessOutput } from '../common/dto/CommonOutput.dto';
 import { CreatePostInputDto, UpdatePostInputDto } from './dto/PostInput.dto';
 import Post from './schema/post.schema';
+import { NotFoundException } from '../error/exceptions';
 
 export class PostService {
     async createPost(input: CreatePostInputDto, userId: string): Promise<IdOutput> {
