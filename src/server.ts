@@ -10,3 +10,19 @@ app.get('/', (req: Request, res: Response) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+
+
+import http from "http";
+import app from ".";
+import "./types";
+
+const port = process.env.PORT;
+const server = http.createServer(app);
+
+connectionToDatabase(() => {
+  server.listen(port, async () => {
+    logger(`Server running on http://127.0.0.1:${port}`);
+    logger(`Swagger docx available on http://127.0.0.1:${port}/v1/api`);
+  });
+});
