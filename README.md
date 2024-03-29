@@ -2,15 +2,15 @@
 # Blogpost (blog api)
 
 
-<a href="https://nodejs.org/" target="_blank"><img src="https://res.cloudinary.com/djvfnekle/image/upload/v1710009760/f05i1vkplc2j3ft5hxoj.png" width="100"  alt="Nestjs Image" /></a>
-<a href="https://www.mongodb.com/" target="_blank"><img src="https://res.cloudinary.com/djvfnekle/image/upload/v1710009753/clo5kbdsb1mlfczslpn7.png" width="100"  alt="MongoDb image" /></a>
-<a href="https://www.docker.com/" target="_blank"><img src="https://res.cloudinary.com/djvfnekle/image/upload/v1710009749/pebtirzmkqmputt8o0pf.png" width="100"  alt="Docker imahe" /></a>
-<a href="https://www.typescriptlang.org/" target="_blank"><img src="https://res.cloudinary.com/djvfnekle/image/upload/v1710009761/otj7i99gcvkj6moeok54.png" width="100"  alt="Typescript image" /></a>
+<a href="https://nodejs.org/" target="_blank"><img src="https://res.cloudinary.com/djvfnekle/image/upload/v1710009760/f05i1vkplc2j3ft5hxoj.png" width="50"  alt="Nestjs Image" /></a>
+<a href="https://www.mongodb.com/" target="_blank"><img src="https://res.cloudinary.com/djvfnekle/image/upload/v1710009753/clo5kbdsb1mlfczslpn7.png" width="50"  alt="MongoDb image" /></a>
+<a href="https://www.docker.com/" target="_blank"><img src="https://res.cloudinary.com/djvfnekle/image/upload/v1710009749/pebtirzmkqmputt8o0pf.png" width="50"  alt="Docker imahe" /></a>
+<a href="https://www.typescriptlang.org/" target="_blank"><img src="https://res.cloudinary.com/djvfnekle/image/upload/v1710009761/otj7i99gcvkj6moeok54.png" width="50"  alt="Typescript image" /></a>
 
 
 ## Description
 
-[Quillpad](https://github.com/zeshan-tech/blogpost) is BE blog app which includes User Management | Post CRUD | comments for posts
+[Blogpost](https://github.com/zeshan-tech/blogpost) is BE blog app which includes User Management | Post CRUD | comments for posts
 
 
 ## Requirements
