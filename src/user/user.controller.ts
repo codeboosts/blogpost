@@ -1,83 +1,110 @@
-import { Controller, Post, Body, Delete, Put, UseGuards, Get } from '@nestjs/common';
+import { Response } from 'express';
 import { UserService } from './user.service';
-import {
-  UserRegisterInputDto,
-  VerifyEmailInputDto,
-  ChangePasswordInputDto,
-  ChangeEmailInputDto,
-  UpdateUserInputDto,
-  LoginInputDto,
-  ForgotPasswordInputDto,
-  ResetPasswordInputDto,
-  SendOTPInputDto,
-} from './dto/UserInput.dto';
-import { AuthService } from '../auth/auth.service';
-import { CurrentUser } from '../decorator/current-user.decorator';
-import { JwtAuthGuard } from '../auth/guards/JwtAuth.guard';
+import { onSignToken } from '../common/utils/tokenManager';
 
-@Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService, private readonly authService: AuthService) {}
+  private readonly userService: UserService
 
-  @Post('register')
-  async register(@Body() input: UserRegisterInputDto) {
-    return await this.userService.register(input);
+  constructor() {
+    this.userService = new UserService();
   }
 
-  @Post('verify-email')
-  verifyEmail(@Body() input: VerifyEmailInputDto) {
-    return this.userService.verifyEmail(input);
+  register = async (req: RequestType, res: Response) => {
+    try {
+      const result = await this.userService.register(req.body);
+      res.json(result)
+    } catch (error) {
+      res.status(error.status).json({ error: error.message });
+    }
   }
 
-  @Post('send-otp')
-  sendOTP(@Body() input: SendOTPInputDto) {
-    return this.userService.sendOTP(input);
+  verifyEmail = async (req: RequestType, res: Response) => {
+    try {
+      const result = await this.userService.verifyEmail(req.body);
+      res.json(result)
+    } catch (error) {
+      res.status(error.status).json({ error: error.message });
+    }
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('me')
-  myInfo(@CurrentUser() currentUser: CurrentUserType) {
-    return this.userService.myInfo(currentUser._id);
+  sendOTP = async (req: RequestType, res: Response) => {
+    try {
+      const result = await this.userService.sendOTP(req.body);
+      res.json(result)
+    } catch (error) {
+      res.status(error.status).json({ error: error.message });
+    }
   }
 
-  @Post('login')
-  async login(@Body() input: LoginInputDto) {
-    const user = await this.userService.login(input);
-    const token = this.authService.signToken(user);
-    return { token };
+  myInfo = async (req: RequestType, res: Response) => {
+    try {
+      const result = await this.userService.myInfo(req.currentUser._id);
+      res.json(result)
+    } catch (error) {
+      res.status(error.status).json({ error: error.message });
+    }
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Delete()
-  deleteUser(@CurrentUser() currentUser: CurrentUserType) {
-    return this.userService.deleteUser(currentUser._id);
+  login = async (req: RequestType, res: Response) => {
+    try {
+      const user = await this.userService.login(req.body);
+      res.json({ token: onSignToken({ _id: user._id.toString(), email: user.email }) })
+    } catch (error) {
+      res.status(error.status).json({ error: error.message });
+    }
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Put('change-password')
-  changePassword(@Body() input: ChangePasswordInputDto, @CurrentUser() currentUser: CurrentUserType) {
-    return this.userService.changePassword(input, currentUser._id);
+  deleteUser = async (req: RequestType, res: Response) => {
+    try {
+      const result = await this.userService.deleteUser(req.currentUser._id);
+      res.json(result)
+    } catch (error) {
+      res.status(error.status).json({ error: error.message });
+    }
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Put('change-email')
-  changeEmail(@Body() input: ChangeEmailInputDto, @CurrentUser() currentUser: CurrentUserType) {
-    return this.userService.changeEmail(input, currentUser.email);
+  changePassword = async (req: RequestType, res: Response) => {
+    try {
+      const result = await this.userService.changePassword(req.body, req.currentUser._id);
+      res.json(result)
+    } catch (error) {
+      res.status(error.status).json({ error: error.message });
+    }
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Put('update')
-  updateUser(@Body() input: UpdateUserInputDto, @CurrentUser() currentUser: CurrentUserType) {
-    return this.userService.updateUser(input, currentUser._id);
+  changeEmail = async (req: RequestType, res: Response) => {
+    try {
+      const result = await this.userService.changeEmail(req.body, req.currentUser.email);
+      res.json(result)
+    } catch (error) {
+      res.status(error.status).json({ error: error.message });
+    }
   }
 
-  @Post('forgot-password')
-  forgotPassword(@Body() input: ForgotPasswordInputDto) {
-    return this.userService.forgotPassword(input);
+  updateUser = async (req: RequestType, res: Response) => {
+    try {
+      const result = await this.userService.updateUser(req.body, req.currentUser._id);
+      res.json(result)
+    } catch (error) {
+      res.status(error.status).json({ error: error.message });
+    }
   }
 
-  @Put('reset-password')
-  resetPassword(@Body() input: ResetPasswordInputDto) {
-    return this.userService.resetPassword(input);
+  forgotPassword = async (req: RequestType, res: Response) => {
+    try {
+      const result = await this.userService.forgotPassword(req.body);
+      res.json(result)
+    } catch (error) {
+      res.status(error.status).json({ error: error.message });
+    }
+  }
+
+  resetPassword = async (req: RequestType, res: Response) => {
+    try {
+      const result = await this.userService.resetPassword(req.body);
+      res.json(result)
+    } catch (error) {
+      res.status(error.status).json({ error: error.message });
+    }
   }
 }
