@@ -1,10 +1,18 @@
 import { Router } from "express";
+import { PostController } from "./post.controller";
 
 
 const router = Router();
+const postController = new PostController();
 
 
-router.get("/", (_, res) => res.send("Hello from post!"));
+router.post('/', postController.createPost);
+router.get('/', postController.getAllPosts);
+router.get('/by-user-id/:userId', postController.getMyPosts);
+router.get(':_id', postController.getPostById);
+router.delete(':_id', postController.deletePost);
+router.put(':_id', postController.updatePost);
+
 
 
 export default router

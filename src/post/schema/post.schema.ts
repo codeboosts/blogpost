@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 import { baseSchema } from "../../base/base.schema";
 
-const postSchema = new mongoose.Schema({
+export const postSchema = new Schema({
   title: {
     type: String,
     required: true
@@ -11,11 +11,11 @@ const postSchema = new mongoose.Schema({
     required: true
   },
   comments: [{
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Comment'
   }],
   user: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
@@ -35,6 +35,6 @@ const postSchema = new mongoose.Schema({
 //   }
 // });
 
-const Post = mongoose.model('Post', postSchema);
+const Post = model('Post', postSchema);
 
 export default Post;
