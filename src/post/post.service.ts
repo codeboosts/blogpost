@@ -1,11 +1,9 @@
 import { Model } from 'mongoose';
 import { IdOutput, SuccessOutput } from '../common/dto/CommonOutput.dto';
 import { CreatePostInputDto, UpdatePostInputDto } from './dto/PostInput.dto';
+import Post from './schema/post.schema';
 
 export class PostService {
-    // private postModel: Model<Po>
-    constructor() { }
-
     async createPost(input: CreatePostInputDto, userId: string): Promise<IdOutput> {
         const post = {
             title: input.Title,
@@ -13,23 +11,23 @@ export class PostService {
             user: userId,
         };
 
-        const createdPost = await this.postModel.create(post);
+        const createdPost = await Post.create(post);
 
         return { _id: createdPost._id.toString() };
     }
 
-    async getPostsByUserId(userId: string): Promise<Post[]> {
-        return this.postModel.find({ user: userId });
+    async getPostsByUserId(userId: string) {
+        return Post.find({ user: userId });
     }
 
-    async getAllPosts(): Promise<Post[]> {
-        const posts = await this.postModel.find();
+    async getAllPosts() {
+        const posts = await Post.find();
 
         return posts;
     }
 
-    async getPostById(_id: string): Promise<Post> {
-        const post = await this.postModel.findOne({ _id });
+    async getPostById(_id: string) {
+        const post = await Post.findOne({ _id });
         if (!post) {
             throw new NotFoundException('Invalid post specified');
         }
@@ -38,7 +36,7 @@ export class PostService {
     }
 
     async deletePost(postId: string, userId: string): Promise<SuccessOutput> {
-        const deletedPost = await this.postModel.findOneAndDelete({ _id: postId, user: userId });
+        const deletedPost = await Post.findOneAndDelete({ _id: postId, user: userId });
 
         if (!deletedPost) {
             throw new NotFoundException('Invalid post specified');
@@ -48,7 +46,7 @@ export class PostService {
     }
 
     async updatePost(input: UpdatePostInputDto, postId: string, userId: string): Promise<SuccessOutput> {
-        const updatedPost = await this.postModel.findOneAndUpdate({ _id: postId, user: userId }, { title: input.Title, content: input.Content });
+        const updatedPost = await Post.findOneAndUpdate({ _id: postId, user: userId }, { title: input.Title, content: input.Content });
 
         if (!updatedPost) {
             throw new NotFoundException('Invalid post specified');
