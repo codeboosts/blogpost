@@ -23,18 +23,18 @@ const commentSchema = new Schema({
     ...baseSchema
 });
 
-// commentSchema.pre('findOneAndDelete', async function (next) {
-//     try {
-//         const currentCommentId = await this.getQuery()._id;
+commentSchema.pre('findOneAndDelete', async function (next) {
+    try {
+        const currentCommentId = await this.getQuery()._id;
 
-//         const commentModel = this.model.db.model('Comment');
-//         await commentModel.deleteMany({ parentComment: currentCommentId });
+        const commentModel = this.model.db.model('Comment');
+        await commentModel.deleteMany({ parentComment: currentCommentId });
 
-//         next();
-//     } catch (error) {
-//         throw new Error(error);
-//     }
-// });
+        next();
+    } catch (error) {
+        throw new Error(error);
+    }
+});
 
 const Comment = model('Comment', commentSchema);
 
