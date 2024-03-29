@@ -14,12 +14,12 @@ router.post("/register", validationMiddleware(UserRegisterInputDto), userControl
 router.post("/verify-email", validationMiddleware(VerifyEmailInputDto), userController.verifyEmail);
 router.post("/send-otp", validationMiddleware(SendOTPInputDto), userController.sendOTP);
 router.post("/login", validationMiddleware(LoginInputDto), userController.login);
-router.get("me", authentication(), userController.myInfo);
-router.delete("", authentication(),  userController.deleteUser);
-router.put("change-password", authentication(), validationMiddleware(ChangePasswordInputDto), userController.changePassword);
-router.put("change-email", authentication(), validationMiddleware(ChangeEmailInputDto), userController.changeEmail);
-router.put("update", authentication(), validationMiddleware(UpdateUserInputDto), userController.updateUser);
-router.post("forgot-password", validationMiddleware(ForgotPasswordInputDto), userController.forgotPassword);
-router.put("reset-password", validationMiddleware(ResetPasswordInputDto), userController.resetPassword);
+router.get("/me", authentication(), userController.myInfo);
+router.delete("/", authentication(),  userController.deleteUser);
+router.put("/change-password", authentication(), validationMiddleware(ChangePasswordInputDto), userController.changePassword);
+router.put("/change-email", authentication(), validationMiddleware(ChangeEmailInputDto), userController.changeEmail);
+router.put("/update", authentication(), validationMiddleware(UpdateUserInputDto), userController.updateUser);
+router.post("/forgot-password", validationMiddleware(ForgotPasswordInputDto), userController.forgotPassword);
+router.put("/reset-password", validationMiddleware(ResetPasswordInputDto), userController.resetPassword);
 
 export default router;

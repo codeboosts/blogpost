@@ -9,9 +9,9 @@ const postController = new PostController();
 router.post('/', postController.createPost);
 router.get('/', postController.getAllPosts);
 router.get('/by-user-id/:userId', postController.getPostsByUserId);
-router.get(':_id', postController.getPostById);
-router.delete(':_id', postController.deletePost);
-router.put(':_id', postController.updatePost);
+router.get('/:_id', postController.getPostById);
+router.delete('/:_id', postController.deletePost);
+router.put('/:_id', postController.updatePost);
 
 
 
