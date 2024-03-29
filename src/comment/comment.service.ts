@@ -1,6 +1,6 @@
 import { CreateCommentInputDto, UpdateCommentInputDto } from './dto/CommentInput.dto';
 import Comment from './schema/comment.schema';
-import { Model, Types } from 'mongoose';
+import { Types } from 'mongoose';
 import { IdOutput, SuccessOutput } from '../common/dto/CommonOutput.dto';
 import { NotFoundException } from '../error/exceptions';
 

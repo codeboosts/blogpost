@@ -2,7 +2,7 @@ import { Response } from "express";
 import { PostService } from "./post.service";
 
 export class PostController {
-  private readonly postService: PostService;
+  private postService: PostService;
 
   constructor() {
     this.postService = new PostService();
