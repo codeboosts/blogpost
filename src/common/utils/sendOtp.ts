@@ -13,14 +13,14 @@ export const onSendOtpToMail = async (email: string, otp: string): Promise<void>
 
     await sgMail.send(msg);
   } catch (error) {
-    throw new Error(error);
+    throw new Erro r(error);
   }
 };
  */
 
-import nodemailer from "nodemailer";
+import  { createTransport } from "nodemailer";
 
-const transporter = nodemailer.createTransport({
+const transporter = createTransport({
   service: 'gmail',
   host: 'smtp.gmail.com',
   port: 587,
