@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo
+    restart: always
+    container_name: blogpost-mongodb
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blogpost-nest-api
+    environment:
+      - PORT=${PORT}
+      - SALT_ROUND=${SALT_ROUND}
+      - REDIS_URI=${REDIS_URI}
+      - DB_URI=${DB_URI}
+      - DB_NAME=${DB_NAME}
+      - JWT_SECRET=${JWT_SECRET}
+      - SMTP_EMAIL=${SMTP_EMAIL}
+      - SMTP_PASS=${SMTP_PASS}
+    ports:
+      - "${PORT}:${PORT}"
+    depends_on:
+      - mongodb
+
+volumes:
+  mongodb_data:
