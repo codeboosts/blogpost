@@ -1,5 +1,6 @@
 import app from ".";
 import { connectToDatabase } from "./db";
+import './types'
 
 const port = process.env.PORT;
 
