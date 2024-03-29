@@ -1,4 +1,4 @@
-import mongoose, { Schema, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { baseSchema } from "../../base/base.schema";
 
 export const postSchema = new Schema({

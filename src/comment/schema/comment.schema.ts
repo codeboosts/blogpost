@@ -1,4 +1,4 @@
-import mongoose, { Schema, Types, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { baseSchema } from "../../base/base.schema";
 
 const commentSchema = new Schema({
