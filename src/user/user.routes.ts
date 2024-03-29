@@ -1,36 +1,25 @@
 import { Router } from "express";
 import { UserController } from "./user.controller";
 import { authentication } from "../middleware/authentication";
-
+import { validationMiddleware } from "../middleware/validation.middleware";
+import { UserRegisterInputDto, ChangeEmailInputDto, ChangePasswordInputDto, ForgotPasswordInputDto, LoginInputDto, ResetPasswordInputDto, SendOTPInputDto, UpdateUserInputDto, VerifyEmailInputDto } from "./dto/UserInput.dto";
 
 const router = Router();
-const userController = UserController();
-
+const userController = new UserController();
 
 router.get("/", (_, res) => res.send("Hello from user!"));
 
+router.post("register", validationMiddleware(UserRegisterInputDto), userController.register);
 
-router.post('register', userController.register)
-//   register(@Body() input: UserRegisterInputDto) {
-router.post('verify-email', userController.verifyEmail)
-//   verifyEmail(@Body() input: VerifyEmailInputDto) {
-router.post('send-otp', userController.sendOTP)
-//   sendOTP(@Body() input: SendOTPInputDto) {
-router.post('login', userController.login)
-//   login(@Body() input: LoginInputDto) {
-router.get('me', authentication(), userController.myInfo)
-//   myInfo(@CurrentUser() currentUser: CurrentUserType) {
-router.delete('', authentication(), userController.deleteUser)
-//   deleteUser(, @CurrentUser() currentUser: CurrentUserType) {
-router.put('change-password', authentication(), userController.changePassword)
-//   changePassword(@Body() input: ChangePasswordInputDto, @CurrentUser() currentUser: CurrentUserType) {
-router.put('change-email', authentication(), userController.changeEmail)
-//   changeEmail(@Body() input: ChangeEmailInputDto, @CurrentUser() currentUser: CurrentUserType) {
-router.put('update', authentication(), userController.updateUser)
-//   updateUser(@Body() input: UpdateUserInputDto, @CurrentUser() currentUser: CurrentUserType) {
-router.post('forgot-password', userController.forgotPassword)
-//   forgotPassword(@Body() input: ForgotPasswordInputDto) {
-router.put('reset-password', userController.resetPassword)
-//   resetPassword(@Body() input: ResetPasswordInputDto) {
+router.post("verify-email", validationMiddleware(VerifyEmailInputDto), userController.verifyEmail);
+router.post("send-otp", validationMiddleware(SendOTPInputDto), userController.sendOTP);
+router.post("login", validationMiddleware(LoginInputDto), userController.login);
+router.get("me", authentication(), userController.myInfo);
+router.delete("", authentication(),  userController.deleteUser);
+router.put("change-password", authentication(), validationMiddleware(ChangePasswordInputDto), userController.changePassword);
+router.put("change-email", authentication(), validationMiddleware(ChangeEmailInputDto), userController.changeEmail);
+router.put("update", authentication(), validationMiddleware(UpdateUserInputDto), userController.updateUser);
+router.post("forgot-password", validationMiddleware(ForgotPasswordInputDto), userController.forgotPassword);
+router.put("reset-password", validationMiddleware(ResetPasswordInputDto), userController.resetPassword);
 
-export default router
+export default router;
