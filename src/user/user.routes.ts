@@ -9,11 +9,11 @@ const userController = new UserController();
 
 router.get("/", (_, res) => res.send("Hello from user!"));
 
-router.post("register", validationMiddleware(UserRegisterInputDto), userController.register);
 
-router.post("verify-email", validationMiddleware(VerifyEmailInputDto), userController.verifyEmail);
-router.post("send-otp", validationMiddleware(SendOTPInputDto), userController.sendOTP);
-router.post("login", validationMiddleware(LoginInputDto), userController.login);
+router.post("/register", validationMiddleware(UserRegisterInputDto), userController.register);
+router.post("/verify-email", validationMiddleware(VerifyEmailInputDto), userController.verifyEmail);
+router.post("/send-otp", validationMiddleware(SendOTPInputDto), userController.sendOTP);
+router.post("/login", validationMiddleware(LoginInputDto), userController.login);
 router.get("me", authentication(), userController.myInfo);
 router.delete("", authentication(),  userController.deleteUser);
 router.put("change-password", authentication(), validationMiddleware(ChangePasswordInputDto), userController.changePassword);

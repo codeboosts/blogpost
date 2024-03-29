@@ -14,7 +14,7 @@ export class UserController {
       const result = await this.userService.register(req.body);
       res.json(result)
     } catch (error) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status ?? 500).json({ error: error.message });
     }
   }
 
@@ -23,7 +23,7 @@ export class UserController {
       const result = await this.userService.verifyEmail(req.body);
       res.json(result)
     } catch (error) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status ?? 500).json({ error: error.message });
     }
   }
 
@@ -32,7 +32,7 @@ export class UserController {
       const result = await this.userService.sendOTP(req.body);
       res.json(result)
     } catch (error) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status ?? 500).json({ error: error.message });
     }
   }
 
@@ -41,7 +41,7 @@ export class UserController {
       const result = await this.userService.myInfo(req.currentUser._id);
       res.json(result)
     } catch (error) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status ?? 500).json({ error: error.message });
     }
   }
 
@@ -50,7 +50,7 @@ export class UserController {
       const user = await this.userService.login(req.body);
       res.json({ token: onSignToken({ _id: user._id.toString(), email: user.email }) })
     } catch (error) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status ?? 500).json({ error: error.message });
     }
   }
 
@@ -59,7 +59,7 @@ export class UserController {
       const result = await this.userService.deleteUser(req.currentUser._id);
       res.json(result)
     } catch (error) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status ?? 500).json({ error: error.message });
     }
   }
 
@@ -68,7 +68,7 @@ export class UserController {
       const result = await this.userService.changePassword(req.body, req.currentUser._id);
       res.json(result)
     } catch (error) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status ?? 500).json({ error: error.message });
     }
   }
 
@@ -77,7 +77,7 @@ export class UserController {
       const result = await this.userService.changeEmail(req.body, req.currentUser.email);
       res.json(result)
     } catch (error) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status ?? 500).json({ error: error.message });
     }
   }
 
@@ -86,7 +86,7 @@ export class UserController {
       const result = await this.userService.updateUser(req.body, req.currentUser._id);
       res.json(result)
     } catch (error) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status ?? 500).json({ error: error.message });
     }
   }
 
@@ -95,7 +95,7 @@ export class UserController {
       const result = await this.userService.forgotPassword(req.body);
       res.json(result)
     } catch (error) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status ?? 500).json({ error: error.message });
     }
   }
 
@@ -104,7 +104,7 @@ export class UserController {
       const result = await this.userService.resetPassword(req.body);
       res.json(result)
     } catch (error) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status ?? 500).json({ error: error.message });
     }
   }
 }

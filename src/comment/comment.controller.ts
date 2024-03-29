@@ -13,7 +13,7 @@ export class CommentController {
     try {
       return this.commentService.createComment(req.body, req.currentUser._id);
     } catch (error) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status ?? 500).json({ error: error.message });
     }
   }
 
@@ -22,7 +22,7 @@ export class CommentController {
     try {
       return this.commentService.getCommentsByPostId(req.params.postId);
     } catch (error) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status ?? 500).json({ error: error.message });
     }
   }
 
@@ -31,7 +31,7 @@ export class CommentController {
     try {
       return this.commentService.getReplies(req.params._id);
     } catch (error) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status ?? 500).json({ error: error.message });
     }
   }
 
@@ -40,7 +40,7 @@ export class CommentController {
     try {
       return this.commentService.deleteComment(req.params._id, req.currentUser._id);
     } catch (error) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status ?? 500).json({ error: error.message });
     }
   }
 
@@ -49,7 +49,7 @@ export class CommentController {
     try {
       return this.commentService.updateComment(req.body, req.params._id, req.currentUser._id);
     } catch (error) {
-      res.status(error.status).json({ error: error.message });
+      res.status(error.status ?? 500).json({ error: error.message });
     }
   }
 }

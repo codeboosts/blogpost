@@ -1,41 +1,36 @@
-import {
-  UserRegisterInputDto,
-  VerifyEmailInputDto,
-  ChangePasswordInputDto,
-  ChangeEmailInputDto,
-  LoginInputDto,
-  UpdateUserInputDto,
-  ForgotPasswordInputDto,
-  ResetPasswordInputDto,
-  SendOTPInputDto,
-} from './dto/UserInput.dto';
-import User from './schema/user.schema';
-import { onComparePassword, onHashPassword } from '../common/utils/bcrypt';
-import { RedisService } from '../redis/redis.service';
-import { MessageOutput, SuccessOutput } from '../common/dto/CommonOutput.dto';
-import { onGenerateOTP } from '../common/utils/otpGenerator';
-import { onSendOtpToMail } from '../common/utils/sendOtp';
-import { BadRequestException, NotFoundException, UnauthorizedException } from '../error/exceptions';
+import { UserRegisterInputDto, VerifyEmailInputDto, ChangePasswordInputDto, ChangeEmailInputDto, LoginInputDto, UpdateUserInputDto, ForgotPasswordInputDto, ResetPasswordInputDto, SendOTPInputDto } from "./dto/UserInput.dto";
+import User from "./schema/user.schema";
+import { onComparePassword, onHashPassword } from "../common/utils/bcrypt";
+import { RedisService } from "../redis/redis.service";
+import { MessageOutput, SuccessOutput } from "../common/dto/CommonOutput.dto";
+import { onGenerateOTP } from "../common/utils/otpGenerator";
+import { onSendOtpToMail } from "../common/utils/sendOtp";
+import { BadRequestException, ConflictException, NotFoundException, UnauthorizedException } from "../error/exceptions";
 
 export class UserService {
-  private readonly redisService: RedisService
+  private readonly redisService: RedisService;
 
   constructor() {
     this.redisService = new RedisService();
   }
 
   async register(input: UserRegisterInputDto): Promise<MessageOutput> {
-    const user = new User()
-    user.email = input.Email,
-      user.fullname = input.Fullname,
-      user.password = await onHashPassword(input.Password),
+    const userExist = await User.findOne({ email: input.Email });
+    if (userExist) {
+      throw new ConflictException("Email already registered");
+    }
 
-      await user.save();
+    const user = new User();
+    user.email = input.Email;
+    user.fullname = input.Fullname;
+    user.password = await onHashPassword(input.Password);
+
+    await user.save();
 
     const otp = onGenerateOTP(6);
     await this.storeAndSendOTP(input.Email, otp);
 
-    return { message: 'Check your mailbox' };
+    return { message: "Check your mailbox" };
   }
 
   async storeAndSendOTP(email: string, otp: string): Promise<void> {
@@ -57,7 +52,7 @@ export class UserService {
     const otp = onGenerateOTP(6);
     await this.storeAndSendOTP(input.Email, otp);
 
-    return { message: 'Check your mailbox' };
+    return { message: "Check your mailbox" };
   }
 
   async myInfo(userId: string) {
@@ -70,11 +65,11 @@ export class UserService {
 
   async login(input: LoginInputDto) {
     const user = await this.getByEmail(input.Email);
-    if (!user) throw new NotFoundException('Invalid credentials specified');
-    if (!user.emailVerified) throw new NotFoundException('Email not verified');
+    if (!user) throw new NotFoundException("Invalid credentials specified");
+    if (!user.emailVerified) throw new NotFoundException("Email not verified");
 
     const isMatched = onComparePassword(user.password, input.Password);
-    if (!isMatched) throw new NotFoundException('Invalid credentials specified');
+    if (!isMatched) throw new NotFoundException("Invalid credentials specified");
 
     return user;
   }
@@ -82,7 +77,7 @@ export class UserService {
   async deleteUser(_id: string): Promise<SuccessOutput> {
     const deletedUser = await User.findOneAndDelete({ _id });
     if (!deletedUser) {
-      throw new NotFoundException('Invalid user specified!');
+      throw new NotFoundException("Invalid user specified!");
     }
 
     return { isSuccess: true };
@@ -91,28 +86,28 @@ export class UserService {
   async changeEmail(input: ChangeEmailInputDto, email: string): Promise<MessageOutput> {
     const user = await User.findOne({ email });
     if (!user) {
-      throw new NotFoundException('Invalid user specified!');
+      throw new NotFoundException("Invalid user specified!");
     }
 
     const isMatched = onComparePassword(user.password, input.Password);
-    if (!isMatched) throw new UnauthorizedException('Invalid credentials specified');
+    if (!isMatched) throw new UnauthorizedException("Invalid credentials specified");
 
     const otp = onGenerateOTP(6);
     await this.storeAndSendOTP(input.NewEmail, otp);
 
     await User.findOneAndUpdate({ email }, { $set: { emailVerified: false, email: input.NewEmail } });
 
-    return { message: 'Check your mailbox' };
+    return { message: "Check your mailbox" };
   }
 
   async changePassword(input: ChangePasswordInputDto, _id: string): Promise<SuccessOutput> {
     const user = await User.findById(_id);
     if (!user) {
-      throw new NotFoundException('Invalid user specified!');
+      throw new NotFoundException("Invalid user specified!");
     }
 
     const isMatched = onComparePassword(user.password, input.Password);
-    if (!isMatched) throw new NotFoundException('Invalid credentials specified');
+    if (!isMatched) throw new NotFoundException("Invalid credentials specified");
 
     await User.findOneAndUpdate({ _id }, { $set: { password: await onHashPassword(input.NewPassword) } });
 
@@ -122,7 +117,7 @@ export class UserService {
   async updateUser(input: UpdateUserInputDto, _id: string): Promise<SuccessOutput> {
     const user = await User.findById(_id);
     if (!user) {
-      throw new NotFoundException('Invalid user specified!');
+      throw new NotFoundException("Invalid user specified!");
     }
 
     await User.findOneAndUpdate({ _id }, { $set: { fullname: input.Fullname } });
@@ -133,13 +128,13 @@ export class UserService {
   async forgotPassword(input: ForgotPasswordInputDto): Promise<MessageOutput> {
     const user = await this.getByEmail(input.Email);
     if (!user) {
-      throw new NotFoundException('Invalid user specified!');
+      throw new NotFoundException("Invalid user specified!");
     }
 
     const otp = onGenerateOTP(6);
     await this.storeAndSendOTP(input.Email, otp);
 
-    return { message: 'Check your mailbox' };
+    return { message: "Check your mailbox" };
   }
 
   async resetPassword(input: ResetPasswordInputDto): Promise<SuccessOutput> {
@@ -154,7 +149,7 @@ export class UserService {
     const user = await User.findOne({ email });
 
     if (!user) {
-      throw new NotFoundException('Invalid email specified');
+      throw new NotFoundException("Invalid email specified");
     }
 
     return user;
@@ -169,7 +164,7 @@ export class UserService {
     const user = await User.findById(_id);
 
     if (!user) {
-      throw new NotFoundException('Invalid user specified');
+      throw new NotFoundException("Invalid user specified");
     }
 
     return user;
@@ -179,7 +174,7 @@ export class UserService {
     const user = await User.findOneAndUpdate({ email }, { $set: { emailVerified: true } });
 
     if (!user) {
-      throw new NotFoundException('Invalid user specified!');
+      throw new NotFoundException("Invalid user specified!");
     }
   }
 
@@ -187,7 +182,7 @@ export class UserService {
     const result = await this.redisService.getValueFromTempStore(email);
 
     if (result !== otp) {
-      throw new BadRequestException('Invalid OTP for ' + email);
+      throw new BadRequestException("Invalid OTP for " + email);
     }
   }
 }
