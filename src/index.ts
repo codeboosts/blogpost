@@ -1,9 +1,9 @@
-import cors from "cors";
-import routes from "./routes";
-import express from "express";
-import dotenv from 'dotenv'
-
+import * as dotenv from 'dotenv'
 dotenv.config()
+import * as cors from "cors";
+import * as express from "express";
+import routes from "./routes";
+
 
 const app = express();
 
