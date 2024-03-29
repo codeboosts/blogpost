@@ -26,19 +26,18 @@ const transporter = createTransport({
   port: 587,
   secure: false,
   auth: {
-    user: "maddison53@ethereal.email",
-    pass: "jn7jnAPss4f63QBp6D",
+    user: "zeshanshakil0@gmail.com", //blogpost
+    pass: "phff wtbt cvhj gvek",
   },
 });
 
 export const onSendOtpToMail = async (email: string, otp: string): Promise<void> => {
   try {
-    // Send mail with defined transport object
     const info = await transporter.sendMail({
-      from: process.env.SMTP_EMAIL, // sender address
-      to: email, // list of receivers
-      subject: "Your OTP", // Subject line
-      text: `Your email verification otp is: ${otp}`, // plain text body
+      from: "zeshanshakil0@gmail.com",
+      to: email, 
+      subject: "Your OTP", 
+      text: `Your email verification otp is: ${otp}`,
     });
 
     console.log("Message sent: %s", info.messageId);
